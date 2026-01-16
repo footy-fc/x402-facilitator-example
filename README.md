@@ -1,5 +1,5 @@
 
-# x402 → Juicebox Multiterminal Minimal Facilitator
+# x402 → Juicebox RevnetMultiterminal Minimal Facilitator
 
 This is a **bare-bones x402 facilitator and verifier** that uses only the Juicebox multiterminal for payments. All escrow, provider, seller, and web client logic has been removed. The facilitator does not hold or escrow funds—payments are made directly via Juicebox multiterminal, and the verifier considers a successful payment as the only success condition.
 
@@ -24,8 +24,7 @@ This repo contains only the minimal facilitator and verifier logic. All other ex
 ---
 
 ```
-Facilitator Escrow → [approve + pay] → Revnet Project 127
-```
+Facilitator Escrow → [approve + pay] → Revnet Project 10```
 
 - Escrow approves `JBMultiTerminal` to spend USDC
 - Escrow calls `JBMultiTerminal.pay()` with exact amount

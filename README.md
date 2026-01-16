@@ -1,43 +1,27 @@
-# x402 → Revnet Facilitator Example
 
-A custom x402 facilitator implementation that demonstrates **Pattern A (Two-step)** integration with Juicebox Revnet. This example shows how to build a facilitator that handles x402 payments and automatically forwards them to Revnet's `JBMultiTerminal.pay()` function.
+# x402 → Juicebox Multiterminal Minimal Facilitator
 
-## 🎯 **Purpose & Constraints**
+This is a **bare-bones x402 facilitator and verifier** that uses only the Juicebox multiterminal for payments. All escrow, provider, seller, and web client logic has been removed. The facilitator does not hold or escrow funds—payments are made directly via Juicebox multiterminal, and the verifier considers a successful payment as the only success condition.
 
-This is a **proof-of-concept example** with the following hardcoded constraints:
+## Features
 
-- **Network**: Base Mainnet only
-- **Revnet Project**: Project ID `127` (hardcoded)
-- **Terminal**: `JBMultiTerminal` at `0xdb9644369c79c3633cde70d2df50d827d7dc7dbc` (hardcoded)
-- **Token**: USDC only (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`)
-- **Payment Flow**: Two-step settlement (EIP-3009 → Revnet)
-- **No Omnichain Support**: Revnet is already deployed on Base, no cross-chain functionality in this demo
+- **Direct payment**: All payments are made directly to Juicebox multiterminal (no escrow).
+- **Minimal API**: Only `/verify` and `/settle` endpoints are provided.
+- **No web frontend, provider, or seller logic**: This repo is stripped to the essentials.
+- **Verifier**: Uses successful Juicebox multiterminal payment as the only success for provider response.
 
-## 🤝 **Provider-Facilitator Relationship**
+## Usage
 
-This demo assumes a **pre-established relationship** between the provider and facilitator:
+1. Configure your environment variables (see DEPLOYMENT.md).
+2. Start the facilitator server.
+3. Use `/settle` to initiate a payment via Juicebox multiterminal.
+4. Use `/verify` to check if a payment was successful (mocked as always valid in this minimal version).
 
-- **Provider** knows the facilitator's escrow address and trusts it to handle payments
-- **Facilitator** has hardcoded Revnet configuration (project ID, terminal address, etc.)
-- **No dynamic negotiation** - the relationship is assumed to be configured beforehand
-- **Trust model** - the provider trusts the facilitator to properly route payments to Revnet
-- **Simplified integration** - no complex parameter passing or discovery mechanisms
+## Architecture
 
-## 🏗️ **Architecture: Two-Step Settlement**
+This repo contains only the minimal facilitator and verifier logic. All other examples, webapps, and APIs have been removed.
 
-This facilitator implements **Pattern A** from the x402 → Revnet integration spec:
-
-### **Step 1: EIP-3009 Transfer**
-
-```
-Buyer → [transferWithAuthorization] → Facilitator Escrow
-```
-
-- Buyer signs EIP-3009 `transferWithAuthorization`
-- USDC is transferred to facilitator's escrow account
-- Standard x402 verification and settlement
-
-### **Step 2: Revnet Payment**
+---
 
 ```
 Facilitator Escrow → [approve + pay] → Revnet Project 127

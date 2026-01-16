@@ -1,3 +1,87 @@
+## 🚀 Quick Start
+1. **Copy environment configuration:**
+   ```bash
+   cp env.production.example .env
+   ```
+2. **Update production values:**
+   - Set your production private key
+   - Update all URLs to your production domains
+   - Configure your Revnet project ID and addresses
+3. **Deploy services:**
+   - Deploy facilitator to your hosting platform
+   - Deploy provider to your hosting platform
+   - Deploy web client to your hosting platform
+## 🚂 Deploying to Railway (Step-by-Step)
+1. **Create a Railway Account**
+   - Go to [railway.app](https://railway.app) and sign up (GitHub login is easiest).
+2. **Install Railway CLI (optional, but helpful)**
+   - Run:  
+   ```
+   npm install -g railway
+   ```
+3. **Initialize Your Project**
+   - In your project folder, run:  
+   ```
+   railway init
+   ```
+   - Follow the prompts to create a new project.
+4. **Deploy Your App**
+   - Run:  
+   ```
+   railway up
+   ```
+   - This will build and deploy your app. Railway will detect your Node.js app automatically.
+5. **Set Environment Variables**
+   - In the Railway dashboard, go to your project → “Variables”.
+   - Add all required environment variables (e.g., `EVM_PRIVATE_KEY`, `BASE_URL`, etc.).
+6. **Get Your Public URL**
+   - After deployment, Railway will provide a public URL for your API.
+7. **Test Your Endpoints**
+   - Use `curl` or Postman to test `/health`, `/verify`, and `/settle`.
+----
+## 💸 Cost
+   - Railway has a generous free tier (as of 2026):  
+   - 500 hours/month of server runtime  
+   - 1GB RAM, 1GB disk per project  
+   - Free tier is usually enough for development, testing, and small production workloads.
+   - Paid plans start if you need more resources or always-on uptime.
+**For a minimal API like this, the free tier is likely sufficient unless you expect high traffic.**
+Let me know if you want a ready-to-copy `.env.example` or more details on any step!
+## 🚀 Deploying to Vercel (Step-by-Step)
+1. **Create a Vercel Account**
+   - Go to [vercel.com](https://vercel.com) and sign up (GitHub login is easiest).
+2. **Install Vercel CLI (optional, but helpful)**
+   - Run:
+   ```
+   npm install -g vercel
+   ```
+3. **Connect Your Project**
+   - In your project folder, run:
+   ```
+   vercel
+   ```
+   - Follow the prompts to link or create a new project.
+4. **Set Environment Variables**
+   - In the Vercel dashboard, go to your project → “Settings” → “Environment Variables”.
+   - Add all required environment variables (e.g., `EVM_PRIVATE_KEY`, `BASE_URL`, etc.).
+5. **Deploy**
+   - Run:
+   ```
+   vercel --prod
+   ```
+   - Or use the Vercel dashboard “Deploy” button.
+6. **Get Your Public URL**
+   - After deployment, Vercel will provide a public URL for your API.
+7. **Test Your Endpoints**
+   - Use `curl` or Postman to test `/api?health`, `/api/verify`, and `/api/settle`.
+---
+## 💸 Cost
+   - Vercel has a generous free tier (as of 2026):
+   - 100GB-hours/month of serverless function execution
+   - 1000 serverless function executions/day
+   - Free tier is usually enough for development, testing, and small production workloads.
+   - Paid plans start if you need more resources or always-on uptime.
+**For a minimal API like this, the free tier is likely sufficient unless you expect high traffic.**
 # Production Deployment Guide
 
 This guide covers deploying the x402 Facilitator Example to production environments.
@@ -42,24 +126,16 @@ This guide covers deploying the x402 Facilitator Example to production environme
 | `REVNET_PROJECT_ID` | Revnet project ID | `127` |
 | `JB_MULTI_TERMINAL_ADDRESS` | JBMultiTerminal contract address | `0xdb9644369c79c3633cde70d2df50d827d7dc7dbc` |
 | `USDC_CONTRACT_ADDRESS` | USDC contract address | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
-| `ESCROW_ADDRESS` | Escrow account address | `0xAbEa4e7a139FAdBDb2B76179C24f0ff76753C800` |
+
 
 ## 🏗️ Deployment Platforms
 
-### Vercel (Recommended for Frontend)
 
-1. **Deploy Web Client:**
 
-   ```bash
-   cd public
-   vercel --prod
-   ```
 
-2. **Set environment variables in Vercel dashboard**
+### Railway (Recommended)
 
-### Railway (Recommended for Backend)
-
-1. **Deploy Facilitator:**
+1. **Deploy Facilitator/Verifier:**
 
    ```bash
    railway login
@@ -69,7 +145,8 @@ This guide covers deploying the x402 Facilitator Example to production environme
 
 2. **Set environment variables in Railway dashboard**
 
-### Docker Deployment
+
+### Docker Deployment (Facilitator/Verifier Only)
 
 1. **Create Dockerfile:**
 
@@ -100,18 +177,10 @@ This guide covers deploying the x402 Facilitator Example to production environme
   - HashiCorp Vault
   - Environment variables (for simple deployments)
 
+
 ### CORS Configuration
 
-Update CORS settings for production:
-
-```typescript
-app.use(
-  cors({
-    origin: [process.env.WEB_CLIENT_URL],
-    credentials: true,
-  }),
-);
-```
+Update CORS settings for production as needed for your use case. If no web client is used, you may allow all origins or restrict as appropriate.
 
 ### Rate Limiting
 
@@ -195,10 +264,10 @@ jobs:
    curl https://your-facilitator-domain.com/supported
    ```
 
+
 3. **End-to-End Test:**
-   - Open your web client URL
-   - Connect MetaMask wallet
-   - Test payment flow
+   - Use API tools (curl, Postman) to test `/verify` and `/settle` endpoints
+   - Test payment flow via Juicebox multiterminal
 
 ## 🚨 Troubleshooting
 
